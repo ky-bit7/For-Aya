@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Aya 🤍</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                    colors: {
+                        iosBlue: '#007AFF',
+                        iosGreen: '#34C759',
+                        spotifyGreen: '#1DB954',
+                        locketYellow: '#FFCC00',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 940px;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.95), 0 0 0 12px #27272a;
+            border-radius: 52px;
+        }
+
+        @media (max-width: 500px) {
+            .phone-frame {
+                max-width: 100vw;
+                height: 100vh;
+                max-height: 100vh;
+                border-radius: 0;
+                box-shadow: none;
+            }
+        }
+
+        .ios-glass-card {
+            background: rgba(28, 28, 32, 0.72);
+            backdrop-filter: blur(28px) saturate(190%);
+            -webkit-backdrop-filter: blur(28px) saturate(190%);
+            border: 0.5px solid rgba(255, 255, 255, 0.16);
+        }
+
+        .ios-icon {
+            border-radius: 22.5%;
+            box-shadow: 0 8px 16px -3px rgba(0, 0, 0, 0.45);
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .ios-icon:active {
+            transform: scale(0.88);
+        }
+
+        .scrollable-app-body {
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+        }
+        .scrollable-app-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scrollable-app-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+        }
+
+        @keyframes iosSpringUp {
+            0% { transform: translateY(100%) scale(0.95); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .animate-spring-up {
+            animation: iosSpringUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .ig-gradient-ring {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        }
+
+        .ig-glass-dock {
+            background: rgba(20, 20, 22, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 min-h-screen flex items-center justify-center font-sans antialiased text-slate-100 select-none p-0 sm:p-4">
+
+    <!-- Phone Viewport Frame -->
+    <div id="phone-container" class="phone-frame flex flex-col justify-between overflow-hidden relative">
+
+        <!-- Dynamic Wallpaper -->
+        <div id="wallpaper-bg" class="absolute inset-0 z-0 bg-cover bg-center transition-all duration-700 bg-slate-900">
+            <div class="absolute inset-0 bg-black/25"></div>
+        </div>
+
+        <!-- ==================== LOCK SCREEN ==================== -->
+        <div id="lockscreen" class="absolute inset-0 z-50 flex flex-col justify-between p-6 bg-cover bg-center transition-transform duration-500 bg-slate-900">
+            <div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+            
+            <div class="relative z-10 pt-12 text-center">
+                <i class="fa-solid fa-lock text-white/80 text-lg mb-2"></i>
+                <div id="lock-time" class="text-6xl font-extralight text-white tracking-tighter">17:20</div>
+                <div id="lock-date" class="text-sm font-semibold text-white/90 mt-1">Wednesday, November 4</div>
+            </div>
+
+            <div class="relative z-10 my-auto flex flex-col items-center space-y-6">
+                <p class="text-xs text-white/70 font-medium">Enter Passcode to Unlock</p>
+                <div class="flex space-x-3" id="pin-dots">
+                    <div class="w-3.5 h-3.5 rounded-full border-2 border-white/80 bg-transparent transition-all"></div>
+                    <div class="w-3.5 h-3.5 rounded-full border-2 border-white/80 bg-transparent transition-all"></div>
+                    <div class="w-3.5 h-3.5 rounded-full border-2 border-white/80 bg-transparent transition-all"></div>
+                    <div class="w-3.5 h-3.5 rounded-full border-2 border-white/80 bg-transparent transition-all"></div>
+                </div>
+                <!-- Passcode Keypad -->
+                <div class="grid grid-cols-3 gap-4 pt-2">
+                    <button onclick="pressPin('1')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">1</button>
+                    <button onclick="pressPin('2')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">2</button>
+                    <button onclick="pressPin('3')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">3</button>
+                    <button onclick="pressPin('4')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">4</button>
+                    <button onclick="pressPin('5')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">5</button>
+                    <button onclick="pressPin('6')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">6</button>
+                    <button onclick="pressPin('7')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">7</button>
+                    <button onclick="pressPin('8')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">8</button>
+                    <button onclick="pressPin('9')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">9</button>
+                    <div></div>
+                    <button onclick="pressPin('0')" class="w-16 h-16 rounded-full bg-white/10 hover:bg-white/20 text-white text-xl font-medium backdrop-blur-xl flex items-center justify-center">0</button>
+                    <button onclick="clearPin()" class="text-xs text-white/80 font-semibold flex items-center justify-center">Clear</button>
+                </div>
+            </div>
+
+            <div class="relative z-10 pb-6 text-center">
+                <button onclick="unlockPhone()" class="text-xs text-white/60 bg-white/10 px-4 py-2 rounded-full backdrop-blur-md">Emergency / Bypass</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Island -->
+        <div class="absolute top-0 left-0 right-0 z-40 flex justify-center pt-2 pointer-events-none">
+            <div class="bg-black text-white w-32 h-7.5 rounded-full flex items-center justify-between px-3 shadow-2xl border border-white/10 pointer-events-auto cursor-pointer" onclick="showToast('Dynamic Island', 'Are you ready, baby?')">
+                <div class="w-3 h-3 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center">
+                    <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                    <span class="w-2 h-2 rounded-full bg-spotifyGreen animate-pulse"></span>
+                    <i class="fa-solid fa-heart text-rose-500 text-[10px]"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Status Bar -->
+        <div class="relative z-30 flex justify-between items-center px-7 pt-3.5 text-white text-xs font-bold tracking-tight shrink-0">
+            <span id="status-time">17:20</span>
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-signal text-[11px]"></i>
+                <span class="text-[10px] font-extrabold">4G</span>
+                <i class="fa-solid fa-wifi text-[11px]"></i>
+                <div class="flex items-center space-x-0.5">
+                    <span class="text-[10px] font-bold mr-0.5">100</span>
+                    <i class="fa-solid fa-battery-full text-xs text-emerald-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Toast Banner -->
+        <div id="toast-banner" class="absolute top-12 left-4 right-4 z-50 ios-glass-card text-white p-3.5 rounded-2xl shadow-2xl transform -translate-y-40 transition-transform duration-300 flex items-start space-x-3 border border-white/20">
+            <div class="w-9 h-9 rounded-xl bg-rose-500 flex items-center justify-center text-white shrink-0 shadow">
+                <i class="fa-solid fa-heart text-sm"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-baseline">
+                    <h4 id="toast-title" class="text-xs font-bold text-white">Aya's</h4>
+                    <span class="text-[9px] text-slate-400">now</span>
+                </div>
+                <p id="toast-body" class="text-xs text-slate-200 mt-0.5 truncate">Welcome!</p>
+            </div>
+        </div>
+
+        <!-- ==================== HOMESCREEN ==================== -->
+        <div id="homescreen" class="relative z-10 flex-1 flex flex-col justify-between px-5 pt-3 pb-3 overflow-hidden">
+            
+            <div class="space-y-4">
+                <!-- Top Weather Widget -->
+                <div onclick="showToast('Montreal Weather', 'Currently 18°C • Mainly Cloudy')" class="bg-gradient-to-r from-sky-900/90 via-indigo-900/90 to-slate-900 p-4 rounded-3xl text-white flex justify-between items-center shadow-2xl border border-white/15 cursor-pointer hover:opacity-95 transition">
+                    <div>
+                        <div class="flex items-center space-x-1.5 text-sky-300">
+                            <i class="fa-solid fa-location-dot text-xs"></i>
+                            <span class="text-xs font-bold tracking-wide">Montreal, QC</span>
+                        </div>
+                        <h2 class="text-3xl font-extrabold tracking-tight text-white mt-1">18°C</h2>
+                        <p class="text-[11px] text-slate-300 font-medium">Mainly Cloudy • H:18° L:13°</p>
+                    </div>
+                    <div class="text-right">
+                        <i class="fa-solid fa-cloud-sun text-4xl text-amber-300 drop-shadow-md"></i>
+                    </div>
+                </div>
+
+                <!-- Reminders & Locket Widgets -->
+                <div class="grid grid-cols-2 gap-3.5">
+                    <!-- Reminders Widget -->
+                    <div onclick="openApp('reminders')" class="ios-glass-card rounded-3xl p-3.5 text-white flex flex-col justify-between h-38 shadow-xl cursor-pointer hover:bg-white/10 transition">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center space-x-1.5 text-amber-400">
+                                <i class="fa-solid fa-list-check text-xs"></i>
+                                <span class="text-[11px] font-bold uppercase tracking-wider">Reminders</span>
+                            </div>
+                            <span class="bg-amber-500 text-black text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center">2</span>
+                        </div>
+                        <div class="space-y-2 my-auto">
+                            <div class="flex items-start space-x-1.5">
+                                <span class="text-amber-400 text-xs">🔴</span>
+                                <div>
+                                    <p id="rem-1-text" class="text-xs font-semibold text-white leading-tight">Training — (Varsity)</p>
+                                    <span class="text-[9.5px] text-slate-400">9:00 - 12:00</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-1.5">
+                                <span class="text-amber-400 text-xs">🔴</span>
+                                <div>
+                                    <p id="rem-2-text" class="text-xs font-semibold text-white leading-tight">work QM</p>
+                                    <span class="text-[9.5px] text-slate-400">19:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Locket Widget -->
+                    <div onclick="openApp('locket')" class="ios-glass-card rounded-3xl overflow-hidden relative h-38 shadow-xl group cursor-pointer border border-white/20 bg-slate-900 flex items-center justify-center">
+                        <img id="home-locket-img" src="" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 hidden">
+                        <div id="home-locket-placeholder" class="flex flex-col items-center justify-center text-slate-400 p-2 text-center">
+                            <i class="fa-solid fa-camera text-2xl mb-1 text-locketYellow"></i>
+                            <span class="text-[10px] font-bold">Tap to add Locket photo</span>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent flex flex-col justify-end p-3">
+                            <div class="flex items-center space-x-1 bg-black/40 backdrop-blur-md px-2 py-0.5 rounded-xl border border-white/10 w-fit mb-1">
+                                <i class="fa-solid fa-fire text-amber-400 text-[10px]"></i>
+                                <span class="text-[10px] font-extrabold text-white">7</span>
+                            </div>
+                            <span id="home-locket-caption" class="text-xs font-bold text-white truncate">us as oranges 🤪</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- App Icons Grid -->
+                <div class="grid grid-cols-4 gap-y-4 gap-x-2 pt-1">
+                    <div onclick="openApp('notes')" class="flex flex-col items-center space-y-1 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-amber-400 flex items-center justify-center text-slate-900 text-2xl shadow-lg">
+                            <i class="fa-solid fa-note-sticky"></i>
+                        </div>
+                        <span class="text-[11px] font-medium text-white drop-shadow">Notes</span>
+                    </div>
+
+                    <div onclick="openApp('calendar')" class="flex flex-col items-center space-y-1 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-white flex flex-col items-center justify-center text-slate-900 shadow-lg">
+                            <span class="text-[9px] font-black text-rose-500 uppercase leading-none">WED</span>
+                            <span class="text-lg font-extrabold leading-tight">4</span>
+                        </div>
+                        <span class="text-[11px] font-medium text-white drop-shadow">Calendar</span>
+                    </div>
+
+                    <div onclick="showToast('Clock', 'Alarm set for 6:00 AM ⏰')" class="flex flex-col items-center space-y-1 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-black flex items-center justify-center text-white text-2xl shadow-lg border border-white/20">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <span class="text-[11px] font-medium text-white drop-shadow">Clock</span>
+                    </div>
+
+                    <div onclick="openApp('photos')" class="flex flex-col items-center space-y-1 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-white flex items-center justify-center text-rose-500 text-2xl shadow-lg overflow-hidden">
+                            <div class="grid grid-cols-2 gap-0.5 p-1.5 w-full h-full">
+                                <div class="bg-rose-400 rounded-sm"></div>
+                                <div class="bg-amber-400 rounded-sm"></div>
+                                <div class="bg-sky-400 rounded-sm"></div>
+                                <div class="bg-emerald-400 rounded-sm"></div>
+                            </div>
+                        </div>
+                        <span class="text-[11px] font-medium text-white drop-shadow">Photos</span>
+                    </div>
+
+                    <div onclick="showToast('UNO!', 'Draw 4! Ready to lose? 😼')" class="flex flex-col items-center space-y-1 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-red-600 flex items-center justify-center text-white text-xl font-black shadow-lg border-2 border-yellow-400">
+                            UNO
+                        </div>
+                        <span class="text-[11px] font-medium text-white drop-shadow">UNO!</span>
+                    </div>
+
+                    <div onclick="showToast('Gmail', 'Inbox: 67 Unread Emails ✉️')" class="flex flex-col items-center space-y-1 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-white flex items-center justify-center text-rose-600 text-2xl shadow-lg">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <span class="text-[11px] font-medium text-white drop-shadow">Gmail</span>
+                    </div>
+
+                    <div onclick="showToast('Netflix', 'Now Playing: The Start of our Story 🍿')" class="flex flex-col items-center space-y-1 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-black flex items-center justify-center text-rose-600 text-2xl font-black shadow-lg border border-rose-900/50">
+                            N
+                        </div>
+                        <span class="text-[11px] font-medium text-white drop-shadow">Netflix</span>
+                    </div>
+
+                    <div onclick="openApp('settings')" class="flex flex-col items-center space-y-1 cursor-pointer">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-slate-700 flex items-center justify-center text-white text-2xl shadow-lg">
+                            <i class="fa-solid fa-gear"></i>
+                        </div>
+                        <span class="text-[11px] font-medium text-white drop-shadow">Settings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Dock -->
+            <div class="ios-glass-card rounded-3xl p-3.5 flex justify-around items-center my-1 border border-white/20 shrink-0 shadow-2xl">
+                <div onclick="openApp('instagram')" class="w-14 h-14 sm:w-16 sm:h-16 ios-icon ig-gradient-ring flex items-center justify-center text-white text-2xl cursor-pointer">
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+                <div onclick="openApp('phone')" class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-emerald-500 flex items-center justify-center text-white text-xl cursor-pointer relative">
+                    <i class="fa-solid fa-phone"></i>
+                    <span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-extrabold w-4.5 h-4.5 rounded-full flex items-center justify-center border border-black">2</span>
+                </div>
+                <div onclick="openApp('messages')" class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-emerald-500 flex items-center justify-center text-white text-xl cursor-pointer relative">
+                    <i class="fa-solid fa-comment"></i>
+                    <span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] font-extrabold w-4.5 h-4.5 rounded-full flex items-center justify-center border border-black">1</span>
+                </div>
+                <div onclick="openApp('spotify')" class="w-14 h-14 sm:w-16 sm:h-16 ios-icon bg-black flex items-center justify-center text-spotifyGreen text-3xl cursor-pointer border border-spotifyGreen/40">
+                    <i class="fa-brands fa-spotify"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== APP MODALS ==================== -->
+
+        <!-- INSTAGRAM APP MODAL -->
+        <div id="app-instagram" class="app-modal absolute inset-0 z-30 bg-black hidden flex-col transition-all duration-300 text-white">
+            <div class="px-5 pt-11 pb-3 bg-black border-b border-white/10 flex justify-between items-center shrink-0">
+                <i class="fa-solid fa-plus text-xl cursor-pointer" onclick="openNewIgPostModal()"></i>
+                <div class="flex items-center space-x-1 cursor-pointer">
+                    <span class="font-bold text-2xl font-serif italic tracking-tight">Instagram</span>
+                    <i class="fa-solid fa-chevron-down text-xs text-slate-400 mt-1"></i>
+                </div>
+                <i class="fa-regular fa-heart text-xl cursor-pointer" onclick="showToast('Notifications', 'No new notifications')"></i>
+            </div>
+
+            <div class="flex-1 overflow-y-auto scrollable-app-body">
+                <div class="flex space-x-4 px-4 py-3 border-b border-white/10 overflow-x-auto no-scrollbar">
+                    <div class="flex flex-col items-center space-y-1 shrink-0">
+                        <div class="relative w-16 h-16 rounded-full p-0.5 border border-slate-700">
+                            <div class="w-full h-full rounded-full bg-slate-800 flex items-center justify-center text-slate-400 text-lg">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <div class="absolute bottom-0 right-0 w-5 h-5 bg-sky-500 rounded-full flex items-center justify-center border-2 border-black text-white text-[10px]">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                        </div>
+                        <span class="text-[11px] text-slate-300">Your story</span>
+                    </div>
+
+                    <div class="flex flex-col items-center space-y-1 shrink-0">
+                        <div class="w-16 h-16 rounded-full p-0.5 ig-gradient-ring">
+                            <div class="w-full h-full rounded-full bg-slate-800 border-2 border-black flex items-center justify-center text-slate-400">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                        </div>
+                        <span class="text-[11px] text-slate-300">leeaya_</span>
+                    </div>
+                </div>
+
+                <div class="px-4 py-3 border-b border-white/10 flex items-center justify-between text-xs text-slate-300">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-check text-rose-500 text-sm"></i>
+                        <span>You've seen the latest posts from accounts you follow.</span>
+                    </div>
+                </div>
+
+                <div id="ig-feed-posts" class="space-y-6 pb-20 pt-4">
+                    <p class="text-xs text-center text-slate-500">No posts yet. Tap + above to upload a post!</p>
+                </div>
+            </div>
+
+            <!-- Floating Dock -->
+            <div class="absolute bottom-4 left-6 right-6 z-40">
+                <div class="ig-glass-dock rounded-full py-2.5 px-6 flex justify-between items-center shadow-2xl text-xl">
+                    <i class="fa-solid fa-house text-white cursor-pointer" onclick="closeApp('instagram')"></i>
+                    <i class="fa-solid fa-play text-slate-400 cursor-pointer" onclick="showToast('Reels', 'Instagram Reels Preview')"></i>
+                    <i class="fa-regular fa-paper-plane text-slate-400 cursor-pointer" onclick="openIgDMModal()"></i>
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 cursor-pointer" onclick="showToast('Search', 'Explore Instagram')"></i>
+                    <i class="fa-regular fa-user text-slate-400 cursor-pointer" onclick="openApp('settings')"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📩 IG DIRECT MESSAGES MODAL -->
+        <div id="modal-ig-dm" class="app-modal absolute inset-0 z-40 bg-black hidden flex-col text-white">
+            <div class="px-5 pt-11 pb-3 border-b border-white/10 flex items-center justify-between">
+                <button onclick="closeIgDMModal()" class="text-sky-400 text-xs font-bold"><i class="fa-solid fa-chevron-left mr-1"></i>Back</button>
+                <h4 id="ig-dm-username" class="font-bold text-sm">Aya 🤍</h4>
+                <button onclick="openApp('settings')" class="text-xs text-slate-400"><i class="fa-solid fa-gear"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-3 scrollable-app-body" id="ig-dm-log"></div>
+            <div class="p-3 bg-slate-900 border-t border-white/10 flex items-center space-x-2">
+                <input id="ig-dm-input" type="text" placeholder="Message..." class="flex-1 bg-slate-800 text-xs px-4 py-2 rounded-full border border-white/10 text-white focus:outline-none">
+                <button onclick="sendIgDM()" class="text-sky-400 text-xs font-bold px-3">Send</button>
+            </div>
+        </div>
+
+        <!-- ➕ IG NEW POST MODAL -->
+        <div id="modal-ig-new-post" class="app-modal absolute inset-0 z-40 bg-slate-950 hidden flex-col text-white">
+            <div class="px-5 pt-11 pb-3 border-b border-white/10 flex justify-between items-center">
+                <button onclick="closeNewIgPostModal()" class="text-slate-400 text-xs">Cancel</button>
+                <h4 class="font-bold text-sm">New Post</h4>
+                <button onclick="publishNewIgPost()" class="text-sky-400 font-bold text-xs">Share</button>
+            </div>
+            <div class="p-4 space-y-4">
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Select Image from Device</label>
+                    <input type="file" id="ig-post-file-input" accept="image/*" class="w-full bg-slate-900 p-2 rounded-xl text-xs border border-white/10">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Write a Caption</label>
+                    <textarea id="ig-post-caption-input" rows="3" placeholder="Write a caption..." class="w-full bg-slate-900 p-3 rounded-xl text-xs border border-white/10 text-white focus:outline-none"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📞 PHONE APP MODAL -->
+        <div id="app-phone" class="app-modal absolute inset-0 z-30 bg-slate-950 hidden flex-col transition-all duration-300 text-white">
+            <div class="px-5 pt-11 pb-2 bg-slate-900 border-b border-white/10 flex items-center space-x-2 shrink-0">
+                <div class="flex-1 bg-slate-800 rounded-xl px-3 py-1.5 flex items-center space-x-2 border border-white/10">
+                    <i class="fa-solid fa-magnifying-glass text-xs text-slate-400"></i>
+                    <input type="text" placeholder="Search contacts..." class="bg-transparent text-xs text-white focus:outline-none w-full">
+                </div>
+                <button onclick="closeApp('phone')" class="text-iosBlue text-xs font-bold">Done</button>
+            </div>
+            <div id="phone-tab-content" class="flex-1 overflow-y-auto p-4 space-y-3 scrollable-app-body text-xs"></div>
+            <div class="bg-slate-900 border-t border-white/10 grid grid-cols-4 py-2.5 shrink-0 text-center text-[10px] text-slate-400">
+                <div onclick="switchPhoneTab('favorites')" id="tab-btn-favorites" class="cursor-pointer text-iosBlue flex flex-col items-center space-y-0.5">
+                    <i class="fa-solid fa-star text-sm"></i>
+                    <span>Favorites</span>
+                </div>
+                <div onclick="switchPhoneTab('recents')" id="tab-btn-recents" class="cursor-pointer flex flex-col items-center space-y-0.5">
+                    <i class="fa-solid fa-clock text-sm"></i>
+                    <span>Recents</span>
+                </div>
+                <div onclick="switchPhoneTab('contacts')" id="tab-btn-contacts" class="cursor-pointer flex flex-col items-center space-y-0.5">
+                    <i class="fa-solid fa-user-group text-sm"></i>
+                    <span>Contacts</span>
+                </div>
+                <div onclick="switchPhoneTab('keypad')" id="tab-btn-keypad" class="cursor-pointer flex flex-col items-center space-y-0.5">
+                    <i class="fa-solid fa-calculator text-sm"></i>
+                    <span>Keypad</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 💬 MESSAGES APP MODAL -->
+        <div id="app-messages" class="app-modal absolute inset-0 z-30 bg-slate-950 hidden flex-col transition-all duration-300 text-white">
+            <div class="px-5 pt-11 pb-3 bg-slate-900 border-b border-white/10 flex items-center space-x-3 shrink-0">
+                <button onclick="closeApp('messages')" class="text-iosBlue text-xs"><i class="fa-solid fa-chevron-left"></i> Back</button>
+                <div class="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold text-xs">A</div>
+                <div class="flex-1">
+                    <h4 id="chat-name-header" class="font-bold text-xs">Aya 🤍</h4>
+                    <span class="text-[9px] text-emerald-400">iMessage • Active Now</span>
+                </div>
+            </div>
+            <div id="chat-log" class="flex-1 overflow-y-auto p-4 space-y-3 scrollable-app-body text-xs"></div>
+            <div class="p-3 bg-black border-t border-white/10 flex items-center space-x-2 shrink-0">
+                <input id="chat-input" type="text" placeholder="iMessage..." class="flex-1 bg-slate-800 text-white text-xs px-4 py-2 rounded-full border border-white/10 focus:outline-none focus:border-iosBlue">
+                <button onclick="sendChatMessage()" class="w-7 h-7 rounded-full bg-iosBlue flex items-center justify-center text-white text-xs shadow hover:scale-105 transition">
+                    <i class="fa-solid fa-arrow-up"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 🎵 SPOTIFY APP MODAL -->
+        <div id="app-spotify" class="app-modal absolute inset-0 z-30 bg-[#121212] hidden flex-col transition-all duration-300 text-white">
+            <div class="px-5 pt-10 pb-3 bg-gradient-to-b from-emerald-900/90 to-[#121212] flex justify-between items-center shrink-0 border-b border-white/5">
+                <button onclick="closeApp('spotify')" class="text-slate-300 text-xs"><i class="fa-solid fa-chevron-left"></i> Home</button>
+                <div class="flex items-center space-x-1.5 text-spotifyGreen">
+                    <i class="fa-brands fa-spotify text-lg"></i>
+                    <span class="text-xs font-extrabold text-white">Our Playlist</span>
+                </div>
+                <button onclick="openAddTrackModal()" class="text-xs text-spotifyGreen font-bold bg-white/10 px-2.5 py-1 rounded-full"><i class="fa-solid fa-plus text-[10px] mr-1"></i>Add Song</button>
+            </div>
+            <div class="flex-1 overflow-y-auto scrollable-app-body p-4 space-y-4">
+                <div class="flex items-center space-x-3.5 bg-gradient-to-r from-emerald-950/80 to-slate-900 p-3.5 rounded-2xl border border-white/10 shadow-xl">
+                    <div id="spotify-active-art-container" class="w-20 h-20 rounded-xl bg-slate-800 flex items-center justify-center border border-white/10 shrink-0 overflow-hidden">
+                        <i class="fa-solid fa-music text-slate-500 text-2xl" id="spotify-active-art-placeholder"></i>
+                        <img id="spotify-active-art" src="" class="w-full h-full object-cover hidden">
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <span class="text-[9px] uppercase font-bold text-spotifyGreen tracking-widest">PLAYLIST</span>
+                        <h2 id="spotify-playlist-title" class="text-base font-extrabold text-white truncate leading-tight">Songs For Aya</h2>
+                        <p class="text-[10px] text-slate-400 mt-0.5"><span id="playlist-track-count">0 tracks</span></p>
+                        <div class="flex items-center space-x-2 mt-2">
+                            <button onclick="toggleAudioPlay()" class="w-8 h-8 rounded-full bg-spotifyGreen text-black flex items-center justify-center text-xs font-bold shadow-lg hover:scale-105 transition">
+                                <i id="spotify-header-play-btn" class="fa-solid fa-play"></i>
+                            </button>
+                            <span class="text-[10px] text-slate-300 font-medium">Play</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 px-1">Playlist Tracks</h4>
+                    <div id="spotify-playlist-items" class="space-y-1.5">
+                        <p class="text-xs text-slate-500 italic p-2 text-center">No songs added yet. Tap "+ Add Song" above!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 bg-[#181818] border-t border-white/10 shrink-0 space-y-2">
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center space-x-2.5 min-w-0 flex-1">
+                        <div id="music-cover-container" class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center overflow-hidden shrink-0">
+                            <i class="fa-solid fa-music text-slate-500 text-xs" id="music-cover-placeholder"></i>
+                            <img id="music-cover" src="" class="w-full h-full object-cover hidden">
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <h4 id="music-title" class="text-xs font-bold text-white truncate">No Song Playing</h4>
+                            <p id="music-artist" class="text-[10px] text-slate-400 truncate">Select or add an MP3 track</p>
+                        </div>
+                    </div>
+                    <button onclick="toggleAudioPlay()" id="music-play-btn" class="w-9 h-9 rounded-full bg-spotifyGreen text-black flex items-center justify-center text-sm font-bold shadow">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ➕ ADD MP3 TRACK MODAL -->
+        <div id="modal-add-track" class="app-modal absolute inset-0 z-40 bg-slate-950 hidden flex-col text-white">
+            <div class="px-5 pt-11 pb-3 border-b border-white/10 flex justify-between items-center">
+                <button onclick="closeAddTrackModal()" class="text-slate-400 text-xs">Cancel</button>
+                <h4 class="font-bold text-sm">Add Song to Spotify</h4>
+                <button onclick="saveNewSpotifyTrack()" class="text-spotifyGreen font-bold text-xs">Save Track</button>
+            </div>
+            <div class="p-4 space-y-4">
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Song Title</label>
+                    <input id="track-title-input" type="text" placeholder="Title..." class="w-full bg-slate-900 p-2.5 rounded-xl text-xs border border-white/10 text-white">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Artist Name</label>
+                    <input id="track-artist-input" type="text" placeholder="Artist..." class="w-full bg-slate-900 p-2.5 rounded-xl text-xs border border-white/10 text-white">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Upload MP3 Audio File (.mp3)</label>
+                    <input type="file" id="track-audio-file" accept="audio/mp3, audio/*, .mp3" class="w-full bg-slate-900 p-2 rounded-xl text-xs border border-white/10">
+                </div>
+                <div>
+                    <label class="text-xs text-slate-400 block mb-1">Upload Cover Art (Optional)</label>
+                    <input type="file" id="track-art-file" accept="image/*" class="w-full bg-slate-900 p-2 rounded-xl text-xs border border-white/10">
+                </div>
+            </div>
+        </div>
+
+        <!-- 💛 LOCKET APP MODAL -->
+        <div id="app-locket" class="app-modal absolute inset-0 z-30 bg-slate-950 hidden flex-col justify-between p-5 pt-11 text-white overflow-y-auto scrollable-app-body">
+            <div class="flex justify-between items-center shrink-0">
+                <button onclick="closeApp('locket')" class="text-locketYellow font-bold text-xs"><i class="fa-solid fa-chevron-left"></i> Home</button>
+                <span class="font-bold text-xs text-locketYellow"><i class="fa-solid fa-heart mr-1"></i>Locket Widget</span>
+                <label class="text-xs text-locketYellow font-bold cursor-pointer">
+                    Change <input type="file" accept="image/*" onchange="handleLocketPhotoUpload(event)" class="hidden">
+                </label>
+            </div>
+            <div class="my-auto flex flex-col items-center text-center py-4">
+                <div class="w-64 h-64 rounded-3xl overflow-hidden shadow-2xl border-2 border-locketYellow bg-slate-900 flex items-center justify-center relative group cursor-pointer" onclick="document.getElementById('locket-direct-input').click()">
+                    <input type="file" id="locket-direct-input" accept="image/*" onchange="handleLocketPhotoUpload(event)" class="hidden">
+                    <img id="locket-app-img" src="" class="w-full h-full object-cover hidden">
+                    <div id="locket-app-placeholder" class="flex flex-col items-center justify-center p-4">
+                        <i class="fa-solid fa-cloud-arrow-up text-4xl text-locketYellow mb-2"></i>
+                        <p class="text-xs text-slate-300 font-semibold">Tap to upload Locket photo</p>
+                    </div>
+                </div>
+                <input id="locket-caption-input" type="text" onchange="updateLocketCaption(this.value)" class="text-sm font-bold text-slate-100 mt-4 bg-slate-900/80 px-4 py-2 rounded-2xl border border-white/10 text-center focus:outline-none focus:border-locketYellow w-64" placeholder="Add caption...">
+            </div>
+            <div></div>
+        </div>
+
+        <!-- 📝 REMINDERS APP MODAL -->
+        <div id="app-reminders" class="app-modal absolute inset-0 z-30 bg-slate-950 hidden flex-col text-white">
+            <div class="px-5 pt-11 pb-3 bg-slate-900 border-b border-white/10 flex justify-between items-center">
+                <button onclick="closeApp('reminders')" class="text-iosBlue font-medium text-xs"><i class="fa-solid fa-chevron-left"></i> Home</button>
+                <h3 class="font-bold text-xs">Reminders</h3>
+                <div></div>
+            </div>
+            <div class="p-4 space-y-3 flex-1 overflow-y-auto scrollable-app-body" id="reminders-list"></div>
+        </div>
+
+        <!-- 💌 NOTES APP MODAL -->
+        <div id="app-notes" class="app-modal absolute inset-0 z-30 bg-amber-50 hidden flex-col text-slate-900">
+            <div class="px-5 pt-11 pb-3 bg-amber-100 border-b border-amber-200 flex justify-between items-center">
+                <button onclick="closeApp('notes')" class="text-amber-800 font-bold text-xs"><i class="fa-solid fa-chevron-left"></i> Home</button>
+                <h3 class="font-bold text-sm">Love Notes</h3>
+                <button onclick="openNoteEditor()" class="text-amber-800 font-bold text-xs"><i class="fa-solid fa-pen-to-square text-base"></i></button>
+            </div>
+            <div class="p-4 space-y-3 flex-1 overflow-y-auto scrollable-app-body" id="notes-list">
+                <p class="text-xs text-amber-700/60 text-center italic">No notes yet. Tap the button above to write one!</p>
+            </div>
+        </div>
+
+        <!-- 📝 NOTE EDITOR MODAL -->
+        <div id="modal-note-editor" class="app-modal absolute inset-0 z-40 bg-amber-50 hidden flex-col text-slate-900">
+            <div class="px-5 pt-11 pb-3 bg-amber-100 border-b border-amber-200 flex justify-between items-center">
+                <button onclick="closeNoteEditor()" class="text-amber-800 text-xs font-semibold">Cancel</button>
+                <h4 id="note-editor-title-header" class="font-bold text-sm">New Note</h4>
+                <button onclick="saveNote()" class="text-amber-900 font-bold text-xs">Done</button>
+            </div>
+            <div class="p-4 flex-1 flex flex-col space-y-3">
+                <input id="note-title-input" type="text" placeholder="Title" class="bg-transparent text-lg font-bold text-slate-900 focus:outline-none border-b border-amber-200 pb-2">
+                <textarea id="note-body-input" placeholder="Start typing your note..." class="bg-transparent text-xs text-slate-800 focus:outline-none flex-1 resize-none leading-relaxed"></textarea>
+                <button id="note-delete-btn" onclick="deleteCurrentNote()" class="hidden text-xs text-rose-600 font-bold py-2 border border-rose-300 rounded-xl hover:bg-rose-100">Delete Note</button>
+            </div>
+        </div>
+
+        <!-- 📸 PHOTOS APP MODAL -->
+        <div id="app-photos" class="app-modal absolute inset-0 z-30 bg-slate-950 hidden flex-col text-white">
+            <div class="px-5 pt-11 pb-3 bg-slate-900 border-b border-white/10 flex justify-between items-center">
+                <button onclick="closeApp('photos')" class="text-iosBlue font-medium text-xs"><i class="fa-solid fa-chevron-left"></i> Home</button>
+                <h3 class="font-bold text-xs">Our Photos</h3>
+                <label class="text-xs text-rose-400 font-bold cursor-pointer">
+                    Upload <input type="file" accept="image/*" onchange="handleDirectGalleryUpload(event)" class="hidden">
+                </label>
+            </div>
+            <div class="p-3 grid grid-cols-2 gap-2 flex-1 overflow-y-auto scrollable-app-body" id="photos-grid">
+                <div class="col-span-2 text-center py-12 text-slate-500 text-xs">
+                    <i class="fa-regular fa-images text-3xl mb-2 text-slate-600"></i>
+                    <p>No photos added yet.<br>Tap Upload above to add memories!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 📅 CALENDAR APP MODAL -->
+        <div id="app-calendar" class="app-modal absolute inset-0 z-30 bg-slate-950 hidden flex-col text-white">
+            <div class="px-5 pt-11 pb-3 bg-slate-900 border-b border-white/10 flex justify-between items-center">
+                <button onclick="closeApp('calendar')" class="text-rose-500 font-medium text-xs"><i class="fa-solid fa-chevron-left"></i> Home</button>
+                <h3 class="font-bold text-xs">Calendar</h3>
+                <div></div>
+            </div>
+            <div class="p-4 space-y-4 flex-1 overflow-y-auto scrollable-app-body">
+                <div class="bg-slate-900 p-4 rounded-2xl border border-white/10 text-center">
+                    <h2 class="text-3xl font-extrabold text-rose-500">WEDNESDAY 4</h2>
+                    <p class="text-xs text-slate-300 mt-1">OUR DAY!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ⚙️ SETTINGS MODAL -->
+        <div id="app-settings" class="app-modal absolute inset-0 z-30 bg-slate-950 hidden flex-col text-white">
+            <div class="px-5 pt-11 pb-3 bg-slate-900 border-b border-white/10 flex justify-between items-center shrink-0">
+                <button onclick="closeApp('settings')" class="text-iosBlue text-xs font-bold">Done</button>
+                <h3 class="font-bold text-xs">Control Center (Settings)</h3>
+                <div></div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 space-y-5 scrollable-app-body text-xs pb-10">
+                <div class="bg-slate-900 p-4 rounded-3xl border border-white/10 space-y-3">
+                    <h4 class="font-bold text-amber-400 text-xs">Lockscreen Passcode PIN</h4>
+                    <input id="cfg-passcode" type="text" maxlength="4" class="w-full bg-slate-800 p-2 rounded-xl border border-white/10 text-white" placeholder="4-digit PIN (e.g. 0702)">
+                </div>
+
+                <div class="bg-slate-900 p-4 rounded-3xl border border-white/10 space-y-3">
+                    <h4 class="font-bold text-rose-400 text-xs">Wallpapers & Locket Photo</h4>
+                    <div>
+                        <label class="text-[10px] text-slate-400 block mb-1">Homescreen Wallpaper</label>
+                        <input type="file" accept="image/*" onchange="handleWallpaperUpload(event)" class="w-full bg-slate-800 p-1 rounded-xl border border-white/10 text-slate-300 text-[10px]">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400 block mb-1">Locket Widget Photo</label>
+                        <input type="file" accept="image/*" onchange="handleLocketPhotoUpload(event)" class="w-full bg-slate-800 p-1 rounded-xl border border-white/10 text-slate-300 text-[10px]">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400">Locket Caption Text</label>
+                        <input id="cfg-locket-caption" type="text" class="w-full bg-slate-800 p-2 rounded-xl border border-white/10 text-white mt-1">
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-4 rounded-3xl border border-white/10 space-y-3">
+                    <h4 class="font-bold text-emerald-400 text-xs">Messages Customizer</h4>
+                    <div>
+                        <label class="text-[10px] text-slate-400">Contact Name</label>
+                        <input id="cfg-gf-name" type="text" class="w-full bg-slate-800 p-2 rounded-xl border border-white/10 text-white mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-400">Auto-Reply Text</label>
+                        <input id="cfg-autoreply" type="text" class="w-full bg-slate-800 p-2 rounded-xl border border-white/10 text-white mt-1">
+                    </div>
+                </div>
+
+                <button onclick="saveCustomSettings()" class="w-full bg-rose-500 font-bold py-3 rounded-2xl text-white text-xs">Save Settings</button>
+            </div>
+        </div>
+
+        <!-- Bottom iOS Indicator Bar -->
+        <div class="relative z-50 flex justify-center pb-2 pt-1 cursor-pointer shrink-0" onclick="closeAllApps()">
+            <div class="w-32 h-1 bg-white/70 rounded-full hover:bg-white transition"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="bg-audio" loop></audio>
+
+    <script>
+        // IndexedDB database setup
+        const DB_NAME = 'ForAyaDB';
+        const DB_VERSION = 1;
+        let db = null;
+
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onupgradeneeded = (e) => {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains('media')) {
+                        database.createObjectStore('media');
+                    }
+                };
+                request.onsuccess = (e) => {
+                    db = e.target.result;
+                    resolve(db);
+                };
+                request.onerror = (e) => reject(e);
+            });
+        }
+
+        function saveMediaDB(key, data) {
+            return new Promise((resolve, reject) => {
+                if (!db) return resolve();
+                const tx = db.transaction('media', 'readwrite');
+                const store = tx.objectStore('media');
+                store.put(data, key);
+                tx.oncomplete = () => resolve();
+                tx.onerror = (e) => reject(e);
+            });
+        }
+
+        function getMediaDB(key) {
+            return new Promise((resolve) => {
+                if (!db) return resolve(null);
+                const tx = db.transaction('media', 'readonly');
+                const store = tx.objectStore('media');
+                const req = store.get(key);
+                req.onsuccess = () => resolve(req.result || null);
+                req.onerror = () => resolve(null);
+            });
+        }
+
+        let appState = {
+            passcode: "0702",
+            enteredPin: "",
+            gfName: "Aya 🤍",
+            autoReplyText: "Haii 😁",
+            wallpaperUrl: "",
+            locketPhotoUrl: "",
+            locketCaption: "us as oranges 🤪",
+            activePhoneTab: "favorites",
+            igDMs: [
+                { id: 1, text: "Hi miss", isUser: true },
+                { id: 2, text: "sarado na ho tindahan namin", isUser: false }
+            ],
+            playlist: [],
+            activeTrackIndex: -1,
+            chatMessages: [],
+            reminders: [
+                { text: "training (9:00 AM)", done: false },
+                { text: "work QM (19:00)", done: false }
+            ],
+            notes: [],
+            photos: [],
+            editingNoteId: null
+        };
+
+        let isPlaying = false;
+
+        window.onload = async function() {
+            try { await initDB(); } catch(e){ console.error(e); }
+            
+            const saved = localStorage.getItem('for_aya_state_v6');
+            if (saved) {
+                try { 
+                    const parsed = JSON.parse(saved);
+                    appState = { ...appState, ...parsed }; 
+                } catch(e){}
+            }
+
+            // Retrieve media stored in IndexedDB
+            const wallpaper = await getMediaDB('wallpaper');
+            if (wallpaper) appState.wallpaperUrl = wallpaper;
+
+            const locket = await getMediaDB('locketPhoto');
+            if (locket) appState.locketPhotoUrl = locket;
+
+            const photos = await getMediaDB('photosList');
+            if (photos) appState.photos = photos;
+
+            const playlist = await getMediaDB('playlistData');
+            if (playlist) appState.playlist = playlist;
+
+            document.getElementById('cfg-passcode').value = appState.passcode;
+            document.getElementById('cfg-gf-name').value = appState.gfName;
+            document.getElementById('cfg-autoreply').value = appState.autoReplyText;
+            document.getElementById('cfg-locket-caption').value = appState.locketCaption;
+
+            renderAll();
+            switchPhoneTab('favorites');
+        };
+
+        function renderAll() {
+            // Wallpaper
+            if (appState.wallpaperUrl) {
+                document.getElementById('wallpaper-bg').style.backgroundImage = `url('${appState.wallpaperUrl}')`;
+                document.getElementById('lockscreen').style.backgroundImage = `url('${appState.wallpaperUrl}')`;
+            }
+
+            // Locket widget
+            if (appState.locketPhotoUrl) {
+                document.getElementById('home-locket-img').src = appState.locketPhotoUrl;
+                document.getElementById('home-locket-img').classList.remove('hidden');
+                document.getElementById('home-locket-placeholder').classList.add('hidden');
+
+                document.getElementById('locket-app-img').src = appState.locketPhotoUrl;
+                document.getElementById('locket-app-img').classList.remove('hidden');
+                document.getElementById('locket-app-placeholder').classList.add('hidden');
+            } else {
+                document.getElementById('home-locket-img').classList.add('hidden');
+                document.getElementById('home-locket-placeholder').classList.remove('hidden');
+
+                document.getElementById('locket-app-img').classList.add('hidden');
+                document.getElementById('locket-app-placeholder').classList.remove('hidden');
+            }
+            document.getElementById('home-locket-caption').innerText = appState.locketCaption;
+            document.getElementById('locket-caption-input').value = appState.locketCaption;
+
+            document.getElementById('chat-name-header').innerText = appState.gfName;
+
+            // Chat render
+            const chatLog = document.getElementById('chat-log');
+            if (appState.chatMessages.length === 0) {
+                chatLog.innerHTML = `<p class="text-xs text-center text-slate-500 my-auto">Start a conversation with ${appState.gfName} 💕</p>`;
+            } else {
+                chatLog.innerHTML = appState.chatMessages.map(m => `
+                    <div class="${m.isUser ? 'flex items-end justify-end' : 'flex items-end'}">
+                        <div class="${m.isUser ? 'bg-iosBlue text-white rounded-br-none' : 'bg-slate-800 text-slate-100 rounded-bl-none'} p-3 rounded-2xl max-w-[80%] shadow">
+                            ${m.text}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // IG DM Render (Blue for user, Gray for girl)
+            const dmLog = document.getElementById('ig-dm-log');
+            if (dmLog) {
+                dmLog.innerHTML = appState.igDMs.map(m => `
+                    <div class="${m.isUser ? 'flex items-end justify-end' : 'flex items-end'}">
+                        <div class="${m.isUser ? 'bg-sky-500 text-white rounded-br-none' : 'bg-slate-800 text-slate-100 rounded-bl-none'} px-3.5 py-2 rounded-2xl max-w-[80%] shadow text-xs">
+                            ${m.text}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Spotify render
+            document.getElementById('playlist-track-count').innerText = `${appState.playlist.length} track${appState.playlist.length === 1 ? '' : 's'}`;
+            if (appState.playlist.length > 0 && appState.activeTrackIndex >= 0) {
+                const activeT = appState.playlist[appState.activeTrackIndex];
+                document.getElementById('spotify-playlist-title').innerText = activeT.title;
+                document.getElementById('music-title').innerText = activeT.title;
+                document.getElementById('music-artist').innerText = activeT.artist;
+
+                if (activeT.artUrl) {
+                    document.getElementById('music-cover').src = activeT.artUrl;
+                    document.getElementById('music-cover').classList.remove('hidden');
+                    document.getElementById('music-cover-placeholder').classList.add('hidden');
+
+                    document.getElementById('spotify-active-art').src = activeT.artUrl;
+                    document.getElementById('spotify-active-art').classList.remove('hidden');
+                    document.getElementById('spotify-active-art-placeholder').classList.add('hidden');
+                }
+
+                if (activeT.audioUrl) {
+                    document.getElementById('bg-audio').src = activeT.audioUrl;
+                }
+            } else {
+                document.getElementById('spotify-playlist-title').innerText = "Songs For Aya";
+                document.getElementById('music-title').innerText = "No Song Playing";
+                document.getElementById('music-artist').innerText = "Select or add an MP3 track";
+                document.getElementById('music-cover').classList.add('hidden');
+                document.getElementById('music-cover-placeholder').classList.remove('hidden');
+                document.getElementById('spotify-active-art').classList.add('hidden');
+                document.getElementById('spotify-active-art-placeholder').classList.remove('hidden');
+            }
+
+            const itemsContainer = document.getElementById('spotify-playlist-items');
+            if (appState.playlist.length === 0) {
+                itemsContainer.innerHTML = `<p class="text-xs text-slate-500 italic p-2 text-center">No songs added yet. Tap "+ Add Song" above!</p>`;
+            } else {
+                itemsContainer.innerHTML = appState.playlist.map((t, idx) => `
+                    <div onclick="selectSpotifyTrack(${idx})" class="spotify-track-item flex items-center justify-between p-2 rounded-xl cursor-pointer ${idx === appState.activeTrackIndex ? 'bg-white/10' : ''}">
+                        <div class="flex items-center space-x-3 min-w-0 flex-1">
+                            <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center overflow-hidden shrink-0">
+                                ${t.artUrl ? `<img src="${t.artUrl}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-music text-slate-500"></i>`}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <h5 class="text-xs font-bold text-white truncate">${t.title}</h5>
+                                <p class="text-[10px] text-slate-400 truncate">${t.artist}</p>
+                            </div>
+                        </div>
+                        <button onclick="deleteSpotifyTrack(event, ${idx})" class="text-slate-500 hover:text-rose-400 p-2 text-xs transition">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            // Photos render
+            const photosGrid = document.getElementById('photos-grid');
+            if (appState.photos.length === 0) {
+                photosGrid.innerHTML = `
+                    <div class="col-span-2 text-center py-12 text-slate-500 text-xs">
+                        <i class="fa-regular fa-images text-3xl mb-2 text-slate-600"></i>
+                        <p>No photos added yet.<br>Tap Upload above to add memories!</p>
+                    </div>
+                `;
+            } else {
+                photosGrid.innerHTML = appState.photos.map(p => `
+                    <div class="rounded-2xl overflow-hidden aspect-square bg-slate-800 border border-white/10">
+                        <img src="${p.url}" class="w-full h-full object-cover">
+                    </div>
+                `).join('');
+            }
+
+            // Notes render
+            const notesList = document.getElementById('notes-list');
+            if (appState.notes.length === 0) {
+                notesList.innerHTML = `<p class="text-xs text-amber-700/60 text-center italic py-8">No notes yet. Tap the edit icon above to write one!</p>`;
+            } else {
+                notesList.innerHTML = appState.notes.map(n => `
+                    <div onclick="openNoteEditor('${n.id}')" class="bg-white p-4 rounded-2xl shadow border border-amber-200 cursor-pointer hover:bg-amber-50/50 transition">
+                        <h4 class="font-bold text-slate-900 text-sm">${n.title || 'Untitled Note'}</h4>
+                        <p class="text-xs text-slate-700 mt-1 line-clamp-2">${n.body || ''}</p>
+                    </div>
+                `).join('');
+            }
+
+            // Reminders render
+            document.getElementById('reminders-list').innerHTML = appState.reminders.map(r => `
+                <div class="bg-slate-900 p-3.5 rounded-2xl border border-white/10 flex items-center space-x-3">
+                    <i class="fa-solid fa-circle-check text-amber-400"></i>
+                    <span class="text-xs font-medium text-white">${r.text}</span>
+                </div>
+            `).join('');
+        }
+
+        // Passcode logic
+        function pressPin(digit) {
+            if (appState.enteredPin.length < 4) {
+                appState.enteredPin += digit;
+                updatePinDots();
+                if (appState.enteredPin.length === 4) {
+                    if (appState.enteredPin === appState.passcode) {
+                        unlockPhone();
+                    } else {
+                        showToast("Incorrect Passcode", "Hint: Our birthdate together");
+                        setTimeout(() => { clearPin(); }, 600);
+                    }
+                }
+            }
+        }
+        function clearPin() {
+            appState.enteredPin = "";
+            updatePinDots();
+        }
+        function updatePinDots() {
+            const dots = document.getElementById('pin-dots').children;
+            for (let i = 0; i < 4; i++) {
+                dots[i].style.backgroundColor = i < appState.enteredPin.length ? "#fff" : "transparent";
+            }
+        }
+        function unlockPhone() {
+            const ls = document.getElementById('lockscreen');
+            ls.style.transform = "translateY(-100%)";
+            setTimeout(() => { ls.style.display = "none"; }, 500);
+            showToast("Unlocked", "Welcome, my Aya!");
+        }
+
+        function switchPhoneTab(tab) {
+            appState.activePhoneTab = tab;
+            const container = document.getElementById('phone-tab-content');
+            
+            ['favorites', 'recents', 'contacts', 'keypad'].forEach(t => {
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (btn) btn.className = `cursor-pointer flex flex-col items-center space-y-0.5 ${t === tab ? 'text-iosBlue' : 'text-slate-400'}`;
+            });
+
+            if (tab === 'favorites' || tab === 'contacts') {
+                container.innerHTML = `
+                    <div class="bg-slate-900 p-3 rounded-2xl border border-white/10 flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold">❤️</div>
+                        <div class="flex-1">
+                            <h4 class="font-bold text-white text-xs">${appState.gfName}</h4>
+                            <p class="text-[10px] text-slate-400">Mobile • Favorite</p>
+                        </div>
+                        <i class="fa-solid fa-phone text-iosGreen text-sm cursor-pointer" onclick="showToast('Calling...', 'Calling ${appState.gfName}')"></i>
+                    </div>
+                `;
+            } else if (tab === 'recents') {
+                container.innerHTML = `
+                    <div class="bg-slate-900 p-3 rounded-2xl border border-white/10 flex items-center justify-between">
+                        <div>
+                            <h4 class="font-bold text-rose-400 text-xs">${appState.gfName}</h4>
+                            <p class="text-[10px] text-slate-400">Incoming Call (10:42 AM)</p>
+                        </div>
+                        <i class="fa-solid fa-phone text-iosGreen text-sm"></i>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="grid grid-cols-3 gap-3 pt-6 text-center text-xl font-medium">
+                        ${[1,2,3,4,5,6,7,8,9,'*',0,'#'].map(n => `<div class="w-14 h-14 rounded-full bg-slate-800 flex items-center justify-center mx-auto cursor-pointer hover:bg-slate-700">${n}</div>`).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        // Instagram Feed
+        function openNewIgPostModal() {
+            document.getElementById('modal-ig-new-post').classList.remove('hidden');
+            document.getElementById('modal-ig-new-post').classList.add('flex');
+        }
+        function closeNewIgPostModal() {
+            document.getElementById('modal-ig-new-post').classList.add('hidden');
+            document.getElementById('modal-ig-new-post').classList.remove('flex');
+        }
+
+        function publishNewIgPost() {
+            const fileInput = document.getElementById('ig-post-file-input');
+            const caption = document.getElementById('ig-post-caption-input').value.trim() || "Pakiss? No? ☹️";
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    addIgPostToFeed(e.target.result, caption);
+                    closeNewIgPostModal();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+
+        function addIgPostToFeed(imgUrl, caption) {
+            const feed = document.getElementById('ig-feed-posts');
+            const postHTML = `
+                <div class="space-y-2 border-b border-white/10 pb-4 animate-spring-up">
+                    <div class="flex items-center justify-between px-4">
+                        <div class="flex items-center space-x-2.5">
+                            <div class="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center font-bold text-xs">A</div>
+                            <span class="font-bold text-xs">${appState.gfName}</span>
+                        </div>
+                        <i class="fa-solid fa-ellipsis-vertical text-slate-400"></i>
+                    </div>
+                    <div class="w-full aspect-square bg-slate-900 overflow-hidden">
+                        <img src="${imgUrl}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="px-4 space-y-1.5">
+                        <div class="flex justify-between items-center text-xl pt-1">
+                            <div class="flex items-center space-x-4">
+                                <i class="fa-solid fa-heart text-rose-500"></i>
+                                <i class="fa-regular fa-comment"></i>
+                                <i class="fa-regular fa-paper-plane"></i>
+                            </div>
+                            <i class="fa-regular fa-bookmark"></i>
+                        </div>
+                        <p class="text-xs font-bold">Liked by <span class="text-white">you</span> and <span class="text-white">others</span></p>
+                        <p class="text-xs"><span class="font-bold mr-1">${appState.gfName}</span> ${caption}</p>
+                    </div>
+                </div>
+            `;
+            const emptyNotice = feed.querySelector('p');
+            if (emptyNotice) emptyNotice.remove();
+            feed.insertAdjacentHTML('afterbegin', postHTML);
+            showToast('Instagram', 'Post published to feed!');
+        }
+
+        // Instagram DM
+        function openIgDMModal() {
+            document.getElementById('modal-ig-dm').classList.remove('hidden');
+            document.getElementById('modal-ig-dm').classList.add('flex');
+        }
+        function closeIgDMModal() {
+            document.getElementById('modal-ig-dm').classList.add('hidden');
+            document.getElementById('modal-ig-dm').classList.remove('flex');
+        }
+
+        function sendIgDM() {
+            const input = document.getElementById('ig-dm-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            appState.igDMs.push({ id: Date.now(), text, isUser: true });
+            input.value = "";
+            saveState(); renderAll();
+
+            setTimeout(() => {
+                appState.igDMs.push({ id: Date.now(), text: appState.autoReplyText, isUser: false });
+                saveState(); renderAll();
+            }, 800);
+        }
+
+        // Spotify Track Player & MP3 Upload Logic
+        function openAddTrackModal() {
+            document.getElementById('modal-add-track').classList.remove('hidden');
+            document.getElementById('modal-add-track').classList.add('flex');
+        }
+        function closeAddTrackModal() {
+            document.getElementById('modal-add-track').classList.add('hidden');
+            document.getElementById('modal-add-track').classList.remove('flex');
+        }
+
+        async function saveNewSpotifyTrack() {
+            const title = document.getElementById('track-title-input').value.trim() || 'Untitled Track';
+            const artist = document.getElementById('track-artist-input').value.trim() || 'Unknown Artist';
+            const audioFile = document.getElementById('track-audio-file').files[0];
+            const artFile = document.getElementById('track-art-file').files[0];
+
+            if (!audioFile) {
+                showToast('Spotify Error', 'Please select an MP3 audio file first!');
+                return;
+            }
+
+            try {
+                showToast('Spotify', 'Encoding MP3 track...');
+                const audioUrl = await readFileAsDataURL(audioFile);
+                let artUrl = '';
+                if (artFile) {
+                    artUrl = await readFileAsDataURL(artFile);
+                }
+
+                const newTrack = { id: Date.now(), title, artist, audioUrl, artUrl };
+                appState.playlist.push(newTrack);
+
+                if (appState.activeTrackIndex === -1) {
+                    appState.activeTrackIndex = 0;
+                }
+
+                await saveMediaDB('playlistData', appState.playlist);
+                saveState();
+                renderAll();
+                closeAddTrackModal();
+                showToast('Spotify', 'MP3 track added to playlist! 🎵');
+            } catch (err) {
+                console.error(err);
+                showToast('Error', 'Failed to upload MP3 file.');
+            }
+        }
+
+        async function deleteSpotifyTrack(event, idx) {
+            event.stopPropagation();
+            const audio = document.getElementById('bg-audio');
+
+            if (idx === appState.activeTrackIndex && isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            }
+
+            appState.playlist.splice(idx, 1);
+            if (appState.playlist.length === 0) {
+                appState.activeTrackIndex = -1;
+                audio.src = "";
+            } else if (appState.activeTrackIndex >= appState.playlist.length) {
+                appState.activeTrackIndex = appState.playlist.length - 1;
+            }
+
+            await saveMediaDB('playlistData', appState.playlist);
+            saveState();
+            renderAll();
+            showToast('Spotify', 'Track deleted!');
+        }
+
+        function selectSpotifyTrack(idx) {
+            appState.activeTrackIndex = idx;
+            renderAll();
+            isPlaying = false;
+            toggleAudioPlay();
+        }
+
+        function toggleAudioPlay() {
+            if (appState.activeTrackIndex < 0 || appState.playlist.length === 0) return;
+            const audio = document.getElementById('bg-audio');
+            const btn = document.getElementById('music-play-btn').querySelector('i');
+            const hBtn = document.getElementById('spotify-header-play-btn');
+
+            const activeTrack = appState.playlist[appState.activeTrackIndex];
+            if (activeTrack && activeTrack.audioUrl && audio.src !== activeTrack.audioUrl) {
+                audio.src = activeTrack.audioUrl;
+            }
+
+            if (isPlaying) {
+                audio.pause();
+                btn.className = "fa-solid fa-play";
+                hBtn.className = "fa-solid fa-play";
+            } else {
+                audio.play().catch(e => console.error("Playback error: ", e));
+                btn.className = "fa-solid fa-pause";
+                hBtn.className = "fa-solid fa-pause";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Media helper
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
+                const r = new FileReader();
+                r.onload = (e) => resolve(e.target.result);
+                r.onerror = (e) => reject(e);
+                r.readAsDataURL(file);
+            });
+        }
+
+        async function handleWallpaperUpload(e) {
+            const f = e.target.files[0];
+            if (f) {
+                const dataUrl = await readFileAsDataURL(f);
+                appState.wallpaperUrl = dataUrl;
+                await saveMediaDB('wallpaper', dataUrl);
+                saveState(); renderAll();
+            }
+        }
+
+        async function handleLocketPhotoUpload(e) {
+            const f = e.target.files[0];
+            if (f) {
+                const dataUrl = await readFileAsDataURL(f);
+                appState.locketPhotoUrl = dataUrl;
+                await saveMediaDB('locketPhoto', dataUrl);
+                saveState(); renderAll();
+                showToast('Locket Widget', 'Locket photo updated! 💛');
+            }
+        }
+
+        function updateLocketCaption(txt) {
+            appState.locketCaption = txt;
+            saveState(); renderAll();
+        }
+
+        async function handleDirectGalleryUpload(e) {
+            const f = e.target.files[0];
+            if (f) {
+                const dataUrl = await readFileAsDataURL(f);
+                appState.photos.unshift({ id: Date.now(), url: dataUrl });
+                await saveMediaDB('photosList', appState.photos);
+                saveState(); renderAll();
+            }
+        }
+
+        // Messages App
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            appState.chatMessages.push({ id: Date.now(), text, isUser: true });
+            input.value = "";
+            saveState(); renderAll();
+
+            setTimeout(() => {
+                appState.chatMessages.push({ id: Date.now(), text: appState.autoReplyText, isUser: false });
+                saveState(); renderAll();
+            }, 800);
+        }
+
+        // Editable Notes App
+        function openNoteEditor(noteId = null) {
+            appState.editingNoteId = noteId;
+            const titleHeader = document.getElementById('note-editor-title-header');
+            const titleInput = document.getElementById('note-title-input');
+            const bodyInput = document.getElementById('note-body-input');
+            const deleteBtn = document.getElementById('note-delete-btn');
+
+            if (noteId) {
+                const existing = appState.notes.find(n => n.id == noteId);
+                if (existing) {
+                    titleHeader.innerText = "Edit Note";
+                    titleInput.value = existing.title || "";
+                    bodyInput.value = existing.body || "";
+                    deleteBtn.classList.remove('hidden');
+                }
+            } else {
+                titleHeader.innerText = "New Note";
+                titleInput.value = "";
+                bodyInput.value = "";
+                deleteBtn.classList.add('hidden');
+            }
+
+            document.getElementById('modal-note-editor').classList.remove('hidden');
+            document.getElementById('modal-note-editor').classList.add('flex');
+        }
+
+        function closeNoteEditor() {
+            document.getElementById('modal-note-editor').classList.add('hidden');
+            document.getElementById('modal-note-editor').classList.remove('flex');
+            appState.editingNoteId = null;
+        }
+
+        function saveNote() {
+            const title = document.getElementById('note-title-input').value.trim() || "Untitled Note";
+            const body = document.getElementById('note-body-input').value.trim();
+
+            if (appState.editingNoteId) {
+                const note = appState.notes.find(n => n.id == appState.editingNoteId);
+                if (note) {
+                    note.title = title;
+                    note.body = body;
+                }
+            } else {
+                appState.notes.unshift({ id: Date.now(), title, body });
+            }
+
+            saveState();
+            renderAll();
+            closeNoteEditor();
+            showToast('Notes', 'Note saved!');
+        }
+
+        function deleteCurrentNote() {
+            if (appState.editingNoteId) {
+                appState.notes = appState.notes.filter(n => n.id != appState.editingNoteId);
+                saveState();
+                renderAll();
+                closeNoteEditor();
+                showToast('Notes', 'Note deleted!');
+            }
+        }
+
+        function openApp(id) {
+            const app = document.getElementById(`app-${id}`);
+            if (app) { app.classList.remove('hidden'); app.classList.add('flex', 'animate-spring-up'); }
+        }
+
+        function closeApp(id) {
+            const app = document.getElementById(`app-${id}`);
+            if (app) { app.classList.add('hidden'); app.classList.remove('flex', 'animate-spring-up'); }
+        }
+
+        function closeAllApps() {
+            document.querySelectorAll('.app-modal').forEach(m => { m.classList.add('hidden'); m.classList.remove('flex'); });
+        }
+
+        function saveState() {
+            const stateToSave = {
+                passcode: appState.passcode,
+                gfName: appState.gfName,
+                autoReplyText: appState.autoReplyText,
+                locketCaption: appState.locketCaption,
+                igDMs: appState.igDMs,
+                chatMessages: appState.chatMessages,
+                reminders: appState.reminders,
+                notes: appState.notes
+            };
+            localStorage.setItem('for_aya_state_v6', JSON.stringify(stateToSave));
+        }
+
+        function saveCustomSettings() {
+            appState.passcode = document.getElementById('cfg-passcode').value || "0702";
+            appState.gfName = document.getElementById('cfg-gf-name').value || "Aya 🤍";
+            appState.autoReplyText = document.getElementById('cfg-autoreply').value || "Haii 😁";
+            appState.locketCaption = document.getElementById('cfg-locket-caption').value || "us as oranges 🤪";
+
+            saveState(); renderAll(); closeApp('settings');
+            showToast("Saved!", "Settings updated");
+        }
+
+        function showToast(title, body) {
+            const toast = document.getElementById('toast-banner');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-body').innerText = body;
+            toast.classList.remove('-translate-y-40');
+            setTimeout(() => { toast.classList.add('-translate-y-40'); }, 2800);
+        }
+    </script>
+</body>
+</html>
